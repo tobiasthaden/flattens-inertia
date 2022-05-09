@@ -47,13 +47,27 @@ class EntryResource extends Resource
             return $default;
         }
 
+        return $this->queryTerms($taxonomy, $terms)->jsonSerialize();
+    }
+
+    public function term($key, $taxonomy, $default = null)
+    {
+        if (!$term = $this->get($key, null)) {
+            return $default;
+        }
+
+        return $this->queryTerms($taxonomy, [$term])->first()->jsonSerialize();
+    }
+
+    protected function queryTerms($taxonomy, array $terms)
+    {
         $query = Term::query();
 
         foreach ($terms as $name) {
             $query->where('id', "{$taxonomy}::{$name}");
         }
 
-        return $query->get()->jsonSerialize();
+        return $query->get();
     }
 
     public function structure()
