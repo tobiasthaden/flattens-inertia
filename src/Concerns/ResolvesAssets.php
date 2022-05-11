@@ -46,10 +46,13 @@ trait ResolvesAssets
 
         if (is_array($data)) {
             if (array_key_exists('type', $data) && 'image' === $data['type']) {
-                $asset = $this->assetFromReference(Arr::get($data, 'attrs.src'));
+                if (preg_match('/asset::[^::]+::.+/', Arr::get($data, 'attrs.src'))) {
+                    $asset = $this->assetFromReference(Arr::get($data, 'attrs.src'));
 
-                Arr::set($data, 'attrs.id', $this->storeAssetResource($asset));
-                Arr::set($data, 'attrs.src', $asset->url());
+
+                    Arr::set($data, 'attrs.id', $this->storeAssetResource($asset));
+                    Arr::set($data, 'attrs.src', $asset->url());
+                }
             }
 
             $collection = new Collection($data);
