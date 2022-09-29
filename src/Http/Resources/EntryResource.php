@@ -47,15 +47,6 @@ class EntryResource extends Resource
             return $default;
         }
 
-        return $this->queryTerms($taxonomy, $terms)->jsonSerialize();
-    }
-
-    public function inTerms($key, $taxonomy, $default = [])
-    {
-        if (!$terms = $this->get($key, null)) {
-            return $default;
-        }
-
         return $this->queryTerms($taxonomy, $terms, 'or')->jsonSerialize();
     }
 
