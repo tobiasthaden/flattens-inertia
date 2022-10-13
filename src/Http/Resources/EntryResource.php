@@ -47,7 +47,7 @@ class EntryResource extends Resource
             return $default;
         }
 
-        return $this->queryTerms($taxonomy, $terms, 'or')->jsonSerialize();
+        return $this->queryTerms($taxonomy, $terms)->jsonSerialize();
     }
 
     public function term($key, $taxonomy, $default = null)
@@ -59,12 +59,12 @@ class EntryResource extends Resource
         return $this->queryTerms($taxonomy, [$term])->first()->jsonSerialize();
     }
 
-    protected function queryTerms($taxonomy, array $terms, $boolean = 'and')
+    protected function queryTerms($taxonomy, array $terms)
     {
         $query = Term::query();
 
         foreach ($terms as $name) {
-            $query->where('id', "=", "{$taxonomy}::{$name}", $boolean);
+            $query->where('id', "{$taxonomy}::{$name}");
         }
 
         return $query->get();

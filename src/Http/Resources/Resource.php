@@ -150,6 +150,13 @@ class Resource implements Arrayable, JsonSerializable, Responsable
             $props = $props->jsonSerialize();
         }
 
+        $props = array_map(function($prop) {
+            if(is_callable($prop) ){
+                $prop = $prop();
+            }
+            return $prop;
+        }, $props);
+
         $props = $this->resolveInternalUrls($props);
 
         $props = $this->resolveAssets($props);

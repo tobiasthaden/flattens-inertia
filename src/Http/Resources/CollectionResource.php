@@ -73,7 +73,7 @@ class CollectionResource extends Resource
                 "operator" => "=",
                 "boolean" => "and",
             ]
-        ], $args);
+        ]);
 
         $entries = ($perPage = Arr::get($args, 'perPage'))
             ? tap($query->paginate($perPage), fn ($paginator) => $this->paginator = $paginator->withQueryString())->items()
@@ -105,17 +105,13 @@ class CollectionResource extends Resource
         }
     }
 
-    protected function queryEntries($wheres = [], $args = [])
+    protected function queryEntries($wheres = [])
     {
         $query = $this->value->queryEntries()
             ->updateWheres($wheres);
 
         if ($this->value->dated()) {
             $query = $query->orderBy('date', $this->value->sortDirection());
-        }
-
-        if (Arr::has($args, 'limit')) {
-            $query = $query->limit($args['limit']);
         }
 
         return $query;
