@@ -56,6 +56,7 @@ trait ResolvesAssets
                 Arr::set($data, 'attrs.id', $this->storeAssetResource($asset));
                 Arr::set($data, 'attrs.src', $asset->url());
             }
+            
             $collection = new Collection($data);
             return $this->resolveAssets($collection);
         }
