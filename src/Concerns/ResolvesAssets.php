@@ -70,7 +70,6 @@ trait ResolvesAssets
         return $data;
     }
 
-
     public function resolveAssetsFromPaths(array $paths, $manipulations = [])
     {
         $paths = Collection::make($paths);
