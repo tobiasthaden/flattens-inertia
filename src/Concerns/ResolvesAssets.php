@@ -12,14 +12,10 @@ trait ResolvesAssets
 {
     protected $assets = [];
 
-    protected $manipulations = [];
-
     protected $urlPrefix = 'statamic://';
 
-    public function storeAssetResource($asset, $manipulations = null)
+    public function storeAssetResource($asset, $manipulations = [])
     {
-        $manipulations = $manipulations ?? $this->manipulations;
-
         return tap(
             crc32($asset->path()),
             fn ($key) => $this->assets[$key] = new Resource($asset, $manipulations)
@@ -51,12 +47,12 @@ trait ResolvesAssets
         if (is_array($data)) {
             if (array_key_exists('type', $data) && 'image' === $data['type']) {
                 if (preg_match('/asset::[^::]+::.+/', Arr::get($data, 'attrs.src'))) {
-                    $asset = preg_match('/asset::[^::]+::.+/', Arr::get($data, 'attrs.src'))
-                        ? $this->assetFromReference(Arr::get($data, 'attrs.src'))
-                        : Asset::find(Arr::get($data, 'attrs.src'));
+                    $asset = $this->assetFromReference(Arr::get($data, 'attrs.src'));
 
-                Arr::set($data, 'attrs.id', $this->storeAssetResource($asset));
-                Arr::set($data, 'attrs.src', $asset->url());
+
+                    Arr::set($data, 'attrs.id', $this->storeAssetResource($asset));
+                    Arr::set($data, 'attrs.src', $asset->url());
+                }
             }
 
             $collection = new Collection($data);
