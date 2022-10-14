@@ -54,7 +54,7 @@ trait ResolvesAssets
                     $asset = preg_match('/asset::[^::]+::.+/', Arr::get($data, 'attrs.src'))
                         ? $this->assetFromReference(Arr::get($data, 'attrs.src'))
                         : Asset::find(Arr::get($data, 'attrs.src'));
-
+                }
                 Arr::set($data, 'attrs.id', $this->storeAssetResource($asset));
                 Arr::set($data, 'attrs.src', $asset->url());
             }
@@ -69,6 +69,7 @@ trait ResolvesAssets
 
         return $data;
     }
+
 
     public function resolveAssetsFromPaths(array $paths, $manipulations = [])
     {
