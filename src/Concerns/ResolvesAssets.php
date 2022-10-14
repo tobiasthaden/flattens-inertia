@@ -50,15 +50,12 @@ trait ResolvesAssets
 
         if (is_array($data)) {
             if (array_key_exists('type', $data) && 'image' === $data['type']) {
-                if (preg_match('/asset::[^::]+::.+/', Arr::get($data, 'attrs.src'))) {
-                    $asset = preg_match('/asset::[^::]+::.+/', Arr::get($data, 'attrs.src'))
-                        ? $this->assetFromReference(Arr::get($data, 'attrs.src'))
-                        : Asset::find(Arr::get($data, 'attrs.src'));
-                }
+                $asset = preg_match('/asset::[^::]+::.+/', Arr::get($data, 'attrs.src'))
+                    ? $this->assetFromReference(Arr::get($data, 'attrs.src'))
+                    : Asset::find(Arr::get($data, 'attrs.src'));
                 Arr::set($data, 'attrs.id', $this->storeAssetResource($asset));
                 Arr::set($data, 'attrs.src', $asset->url());
             }
-
             $collection = new Collection($data);
             return $this->resolveAssets($collection);
         }
